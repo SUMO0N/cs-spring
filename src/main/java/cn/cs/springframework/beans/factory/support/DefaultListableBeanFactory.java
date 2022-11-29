@@ -1,7 +1,6 @@
 package cn.cs.springframework.beans.factory.support;
 
 import cn.cs.springframework.beans.BeansException;
-import cn.cs.springframework.beans.factory.BeanFactory;
 import cn.cs.springframework.beans.factory.ConfigurableListableBeanFactory;
 import cn.cs.springframework.beans.factory.config.BeanDefinition;
 

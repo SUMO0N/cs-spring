@@ -1,20 +1,25 @@
 package cn.cs.springframework.test.bean;
 
-import cn.cs.springframework.beans.factory.DisposableBean;
-import cn.cs.springframework.beans.factory.InitializingBean;
+import cn.cs.springframework.beans.BeansException;
+import cn.cs.springframework.beans.factory.*;
+import cn.cs.springframework.context.ApplicationContext;
+import cn.cs.springframework.context.ApplicationContextAware;
 
 /**
  * @Author cs
  * @Date 2022-11-25 11:20
  */
-public class UserService implements InitializingBean, DisposableBean {
+public class UserService implements BeanNameAware, BeanClassLoaderAware, ApplicationContextAware, BeanFactoryAware {
     private String uid;
     private String company;
     private String location;
     private UserDao userDao;
 
+    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
+
     public String query() {
-        return userDao.queryUserName(uid)+", 公司："+company+", 地点"+location;
+        return userDao.queryUserName(uid)+", 公司："+company+", 地点:"+location;
     }
 
     public String getUid() {
@@ -50,12 +55,30 @@ public class UserService implements InitializingBean, DisposableBean {
     }
 
     @Override
-    public void destroy() throws Exception {
-        System.out.println("执行：UserService.destroy");
+    public void setBeanClassLoader(ClassLoader classLoader) {
+        System.out.println("ClassLoader：" + classLoader);
     }
 
     @Override
-    public void afterPropertiesSet() {
-        System.out.println("执行：UserService.afterPropertiesSet");
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("Bean Name is：" + name);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
     }
 }

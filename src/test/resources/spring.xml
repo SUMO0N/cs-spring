@@ -6,10 +6,10 @@
     <bean id="userService" class="cn.cs.springframework.test.bean.UserService">
         <property name="uid" value="10001"/>
         <property name="company" value="uuc"/>
-        <property name="location" value="??"/>
+        <property name="location" value="hz"/>
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <bean class="cn.cs.springframework.test.common.MyBeanPostProcessor"/>
-    <bean class="cn.cs.springframework.test.common.MyBeanFactoryPostProcessor"/>
+<!--    <bean class="cn.cs.springframework.test.common.MyBeanPostProcessor"/>-->
+<!--    <bean class="cn.cs.springframework.test.common.MyBeanFactoryPostProcessor"/>-->
 </beans>

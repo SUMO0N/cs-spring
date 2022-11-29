@@ -26,5 +26,7 @@ public class ApiTest {
         applicationContext.registryShutdownHook();
         UserService userService = applicationContext.getBean("userService", UserService.class);
         System.out.println(userService.query());
+        System.out.println(userService.getApplicationContext());
+        System.out.println(userService.getBeanFactory());
     }
 }
