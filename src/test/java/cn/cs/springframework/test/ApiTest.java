@@ -23,6 +23,7 @@ public class ApiTest {
 //        MyBeanPostProcessor beanPostProcessor = new MyBeanPostProcessor();
 //        beanFactory.addBeanPostProcessor(beanPostProcessor);
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registryShutdownHook();
         UserService userService = applicationContext.getBean("userService", UserService.class);
         System.out.println(userService.query());
     }
