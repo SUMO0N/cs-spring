@@ -6,6 +6,7 @@ import cn.cs.springframework.context.support.ClassPathXmlApplicationContext;
 import cn.cs.springframework.test.bean.UserService;
 import cn.cs.springframework.test.common.MyBeanFactoryPostProcessor;
 import cn.cs.springframework.test.common.MyBeanPostProcessor;
+import org.openjdk.jol.info.ClassLayout;
 
 /**
  * @Author cs
@@ -25,8 +26,11 @@ public class ApiTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         applicationContext.registryShutdownHook();
         UserService userService = applicationContext.getBean("userService", UserService.class);
-        System.out.println(userService.query());
-        System.out.println(userService.getApplicationContext());
-        System.out.println(userService.getBeanFactory());
+        UserService userService01 = applicationContext.getBean("userService", UserService.class);
+        System.out.println(userService);
+        System.out.println(userService01);
+
+        System.out.println(userService01 + " 十六进制哈希：" + Integer.toHexString(userService01.hashCode()));
+        System.out.println(ClassLayout.parseInstance(userService01).toPrintable());
     }
 }

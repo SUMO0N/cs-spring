@@ -1,6 +1,8 @@
 package cn.cs.springframework.beans.factory.support;
 
 import cn.cs.springframework.beans.BeansException;
+import cn.cs.springframework.beans.factory.BeanFactory;
+import cn.cs.springframework.beans.factory.FactoryBean;
 import cn.cs.springframework.beans.factory.config.BeanDefinition;
 import cn.cs.springframework.beans.factory.config.BeanPostProcessor;
 import cn.cs.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -13,7 +15,7 @@ import java.util.List;
  * @Author cs
  * @Date 2022-11-25 11:27
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
@@ -35,12 +37,25 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     }
 
     protected <T> T doGetBean(String name, Object[] args) throws BeansException {
-        Object bean = super.getSingleton(name);
-        if(bean != null) {
-            return (T) bean;
+        Object sharedInstance = super.getSingleton(name);
+        if(sharedInstance != null) {
+            return (T) getObjectForBeanInstance(sharedInstance, name);
         }
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        return (T) createBean(name, beanDefinition, args);
+        Object bean = createBean(name, beanDefinition, args);
+        return (T) getObjectForBeanInstance(bean, name);
+    }
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if(!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+        Object object = getCachedObjectForFactoryBean(beanName);
+        if(object == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            object = getCachedObjectForFactoryBean(factoryBean, beanName);
+        }
+        return object;
     }
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
