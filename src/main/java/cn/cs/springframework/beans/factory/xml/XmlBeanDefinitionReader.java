@@ -12,7 +12,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
@@ -108,7 +107,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
             }
 
-            getRegistry().registryBeanDefinition(beanName, beanDefinition);
+            getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
 
     }
