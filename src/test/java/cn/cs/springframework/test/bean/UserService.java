@@ -9,15 +9,21 @@ import cn.cs.springframework.context.ApplicationContextAware;
  * @Author cs
  * @Date 2022-11-25 11:20
  */
-public class UserService{
+public class UserService implements IUserService{
     private String uid;
     private String company;
     private String location;
     private IUserDao userDao;
 
     public String query() {
-        return userDao.queryUserName(uid)+", 公司："+company+", 地点:"+location;
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+        return "cool";
     }
+
+
 
     public String getUid() {
         return uid;
