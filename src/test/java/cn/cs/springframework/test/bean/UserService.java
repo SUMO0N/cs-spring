@@ -23,7 +23,13 @@ public class UserService implements IUserService{
         return "cool";
     }
 
-
+    public String register(String name) {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+        return name + ", register!";
+    }
 
     public String getUid() {
         return uid;

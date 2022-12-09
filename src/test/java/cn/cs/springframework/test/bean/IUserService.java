@@ -6,4 +6,5 @@ package cn.cs.springframework.test.bean;
  */
 public interface IUserService {
     String query();
+    String register(String name);
 }
