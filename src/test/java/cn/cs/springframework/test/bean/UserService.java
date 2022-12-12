@@ -1,19 +1,14 @@
 package cn.cs.springframework.test.bean;
 
-import cn.cs.springframework.beans.BeansException;
-import cn.cs.springframework.beans.factory.*;
-import cn.cs.springframework.context.ApplicationContext;
-import cn.cs.springframework.context.ApplicationContextAware;
+import cn.cs.springframework.stereotype.Component;
 
 /**
  * @Author cs
  * @Date 2022-11-25 11:20
  */
+@Component("userService")
 public class UserService implements IUserService{
-    private String uid;
-    private String company;
-    private String location;
-    private IUserDao userDao;
+    private String token;
 
     public String query() {
         try {
@@ -31,36 +26,18 @@ public class UserService implements IUserService{
         return name + ", register!";
     }
 
-    public String getUid() {
-        return uid;
+    public String getToken() {
+        return token;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getCompany() {
-        return company;
+    @Override
+    public String toString() {
+        return "UserService{" +
+                "token='" + token + '\'' +
+                '}';
     }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public IUserDao getUserDao() {
-        return userDao;
-    }
-
-    public void setUserDao(IUserDao userDao) {
-        this.userDao = userDao;
-    }
-
 }

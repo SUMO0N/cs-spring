@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <beans>
-<!--    <bean id="userDao" class="cn.cs.springframework.test.bean.IUserDao" init-method="initDataMethod" destroy-method="destroyDataMethod"/>-->
 
-    <bean id="userService" class="cn.cs.springframework.test.bean.UserService" scope="singleton"/>
-    <bean class="cn.cs.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
-    <bean id="beforeAdvice" class="cn.cs.springframework.test.bean.UserServiceBeforeAdvice"/>
-    <bean id="methodInterceptor" class="cn.cs.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
-        <property name="advice" ref="beforeAdvice"/>
-    </bean>
-    <bean id="pointcutAdvisor" class="cn.cs.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* cn.cs.springframework.test.bean.IUserService.*(..))"/>
-        <property name="advice" ref="methodInterceptor"/>
+    <bean class="cn.cs.springframework.beans.factory.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:token.properties"/>
     </bean>
 
-<!--    <bean id="proxyUserDao" class="cn.cs.springframework.test.bean.ProxyBeanFactory"/>-->
-<!--    <bean class="cn.cs.springframework.test.common.MyBeanPostProcessor"/>-->
-<!--    <bean class="cn.cs.springframework.test.common.MyBeanFactoryPostProcessor"/>-->
-
-<!--    <bean class="cn.cs.springframework.test.event.ContextCLoseEventListener"/>-->
-<!--    <bean class="cn.cs.springframework.test.event.ContextRefreshEventListener"/>-->
-<!--    <bean class="cn.cs.springframework.test.event.CustomEventListener"/>-->
+    <bean id="userService" class="cn.cs.springframework.test.bean.UserService">
+        <property name="token" value="${token}"/>
+    </bean>
 
 </beans>
