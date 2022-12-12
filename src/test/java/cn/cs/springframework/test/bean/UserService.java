@@ -1,5 +1,7 @@
 package cn.cs.springframework.test.bean;
 
+import cn.cs.springframework.beans.factory.annotation.Autowired;
+import cn.cs.springframework.beans.factory.annotation.Value;
 import cn.cs.springframework.stereotype.Component;
 
 /**
@@ -8,14 +10,17 @@ import cn.cs.springframework.stereotype.Component;
  */
 @Component("userService")
 public class UserService implements IUserService{
+    @Value("${token}")
     private String token;
+    @Autowired
+    private UserDao userDao;
 
     public String query() {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
         }
-        return "cool";
+        return userDao.queryUserName("10001");
     }
 
     public String register(String name) {

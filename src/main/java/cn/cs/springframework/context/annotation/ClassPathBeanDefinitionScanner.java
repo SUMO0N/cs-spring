@@ -1,5 +1,6 @@
 package cn.cs.springframework.context.annotation;
 
+import cn.cs.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import cn.cs.springframework.beans.factory.config.BeanDefinition;
 import cn.cs.springframework.beans.factory.support.BeanDefinitionRegistry;
 import cn.cs.springframework.stereotype.Component;
@@ -29,6 +30,8 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 registry.registerBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
             }
         }
+        registry.registerBeanDefinition("cn.cs.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor",
+                new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 
     private String determineBeanName(BeanDefinition beanDefinition) {

@@ -1,12 +1,12 @@
 package cn.cs.springframework.beans.factory.support;
 
 import cn.cs.springframework.beans.BeansException;
-import cn.cs.springframework.beans.factory.BeanFactory;
 import cn.cs.springframework.beans.factory.FactoryBean;
 import cn.cs.springframework.beans.factory.config.BeanDefinition;
 import cn.cs.springframework.beans.factory.config.BeanPostProcessor;
 import cn.cs.springframework.beans.factory.config.ConfigurableBeanFactory;
-import cn.cs.springframework.uitils.ClassUtils;
+import cn.cs.springframework.uitil.ClassUtils;
+import cn.cs.springframework.uitil.StringValueResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,8 @@ import java.util.List;
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+    private List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
@@ -34,6 +36,26 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
         return (T) getBean(name);
+    }
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        beanPostProcessors.remove(beanPostProcessor);
+        beanPostProcessors.add(beanPostProcessor);
+    }
+
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
+        embeddedValueResolvers.add(valueResolver);
+    }
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver resolver : embeddedValueResolvers) {
+            result = resolver.resolveStringValue(result);
+        }
+        return result;
     }
 
     protected <T> T doGetBean(String name, Object[] args) throws BeansException {
@@ -61,12 +83,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
-
-    @Override
-    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
-        beanPostProcessors.remove(beanPostProcessor);
-        beanPostProcessors.add(beanPostProcessor);
-    }
 
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return beanPostProcessors;

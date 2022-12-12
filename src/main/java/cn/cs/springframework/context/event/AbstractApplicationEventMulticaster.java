@@ -5,7 +5,7 @@ import cn.cs.springframework.beans.factory.BeanFactory;
 import cn.cs.springframework.beans.factory.BeanFactoryAware;
 import cn.cs.springframework.context.ApplicationEvent;
 import cn.cs.springframework.context.ApplicationListener;
-import cn.cs.springframework.uitils.ClassUtils;
+import cn.cs.springframework.uitil.ClassUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

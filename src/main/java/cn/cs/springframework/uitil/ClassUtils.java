@@ -1,4 +1,4 @@
-package cn.cs.springframework.uitils;
+package cn.cs.springframework.uitil;
 
 /**
  * @Author cs

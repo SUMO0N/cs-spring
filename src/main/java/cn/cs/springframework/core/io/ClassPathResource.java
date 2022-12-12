@@ -1,6 +1,6 @@
 package cn.cs.springframework.core.io;
 
-import cn.cs.springframework.uitils.ClassUtils;
+import cn.cs.springframework.uitil.ClassUtils;
 import cn.hutool.core.lang.Assert;
 
 import java.io.FileNotFoundException;
