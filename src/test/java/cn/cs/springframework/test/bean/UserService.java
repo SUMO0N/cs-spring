@@ -8,11 +8,11 @@ import cn.cs.springframework.stereotype.Component;
  * @Author cs
  * @Date 2022-11-25 11:20
  */
-@Component("userService")
+//@Component("userService")
 public class UserService implements IUserService{
-    @Value("${token}")
+//    @Value("${token}")
     private String token;
-    @Autowired
+//    @Autowired
     private UserDao userDao;
 
     public String query() {
@@ -20,7 +20,7 @@ public class UserService implements IUserService{
             Thread.sleep(100);
         } catch (InterruptedException e) {
         }
-        return userDao.queryUserName("10001");
+        return token;
     }
 
     public String register(String name) {

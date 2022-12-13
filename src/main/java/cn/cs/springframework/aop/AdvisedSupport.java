@@ -12,6 +12,7 @@ public class AdvisedSupport {
     private MethodInterceptor methodInterceptor;
     private MethodMatcher methodMatcher;
 
+    // ProxyConfig
     private boolean proxyTargetClass = false;
 
     public TargetSource getTargetSource() {

@@ -74,5 +74,10 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
         return null;
     }
 
+    @Override
+    public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
+        return true;
+    }
+
 
 }
