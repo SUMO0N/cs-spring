@@ -16,6 +16,9 @@ import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Author cs
@@ -24,6 +27,8 @@ import java.util.Collection;
 public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
     private DefaultListableBeanFactory beanFactory;
+
+    private final Set<Object> earlyProxyReferences = Collections.synchronizedSet(new HashSet<>());
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -37,25 +42,8 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-
-        if(isInfrastructureClass(bean.getClass())) return bean;
-
-        Collection<AspectJExpressionPointcutAdvisor> advisors = beanFactory.getBeansOfType(AspectJExpressionPointcutAdvisor.class).values();
-        for (AspectJExpressionPointcutAdvisor advisor : advisors) {
-            if(!advisor.getPointcut().getClassFilter().matches(bean.getClass())) continue;
-            AdvisedSupport advised = new AdvisedSupport();
-
-            TargetSource targetSource = null;
-            try {
-                targetSource = new TargetSource(bean);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            advised.setTargetSource(targetSource);
-            advised.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
-            advised.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
-            advised.setProxyTargetClass(false);
-            return new ProxyFactory(advised).getProxy();
+        if(!earlyProxyReferences.contains(beanName)) {
+            return wrapIfNecessary(bean, beanName);
         }
         return bean;
     }
@@ -77,5 +65,34 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
     private boolean isInfrastructureClass(Class<?> beanClass) {
         return Advisor.class.isAssignableFrom(beanClass) || Pointcut.class.isAssignableFrom(beanClass) || Advice.class.isAssignableFrom(beanClass);
+    }
+
+    protected Object wrapIfNecessary(Object bean, String beanName) {
+        if(isInfrastructureClass(bean.getClass())) return bean;
+
+        Collection<AspectJExpressionPointcutAdvisor> advisors = beanFactory.getBeansOfType(AspectJExpressionPointcutAdvisor.class).values();
+        for (AspectJExpressionPointcutAdvisor advisor : advisors) {
+            if(!advisor.getPointcut().getClassFilter().matches(bean.getClass())) continue;
+            AdvisedSupport advised = new AdvisedSupport();
+
+            TargetSource targetSource = null;
+            try {
+                targetSource = new TargetSource(bean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            advised.setTargetSource(targetSource);
+            advised.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
+            advised.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
+            advised.setProxyTargetClass(true);
+            return new ProxyFactory(advised).getProxy();
+        }
+        return bean;
+    }
+
+    @Override
+    public Object getEarlyBeanReference(Object bean, String beanName) {
+        earlyProxyReferences.add(beanName);
+        return wrapIfNecessary(bean, beanName);
     }
 }

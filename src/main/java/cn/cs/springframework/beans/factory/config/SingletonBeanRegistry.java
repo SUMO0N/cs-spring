@@ -6,5 +6,5 @@ package cn.cs.springframework.beans.factory.config;
  */
 public interface SingletonBeanRegistry{
     Object getSingleton(String beanName);
-    void registrySingleton(String beanName, Object singletonObject);
+    void registerSingleton(String beanName, Object singletonObject);
 }

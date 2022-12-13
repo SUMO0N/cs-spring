@@ -11,18 +11,24 @@
     <bean class="cn.cs.springframework.beans.factory.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:token.properties"/>
     </bean>
+    <bean id="a" class="cn.cs.springframework.test.bean.A">
+        <property name="b" ref="b"/>
+    </bean>
+    <bean id="b" class="cn.cs.springframework.test.bean.B">
+        <property name="a" ref="a"/>
+    </bean>
 <!--    <context:component-scan base-package="cn.cs.springframework.test.bean"/>-->
 
-    <bean id="userService" class="cn.cs.springframework.test.bean.UserService">
-        <property name="token" value="RejDlI78hu223Opo983Ds"/>
-    </bean>
+<!--    <bean id="userService" class="cn.cs.springframework.test.bean.UserService">-->
+<!--        <property name="token" value="RejDlI78hu223Opo983Ds"/>-->
+<!--    </bean>-->
     <bean class="cn.cs.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     <bean id="beforeAdvice" class="cn.cs.springframework.test.bean.UserServiceBeforeAdvice"/>
     <bean id="methodInterceptor" class="cn.cs.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="beforeAdvice"/>
     </bean>
     <bean id="pointcutAdvisor" class="cn.cs.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* cn.cs.springframework.test.bean.IUserService.*(..))"/>
+        <property name="expression" value="execution(* cn.cs.springframework.test.bean.A.*(..))"/>
         <property name="advice" ref="methodInterceptor"/>
     </bean>
 </beans>
