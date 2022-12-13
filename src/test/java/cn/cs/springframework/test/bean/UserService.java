@@ -4,6 +4,8 @@ import cn.cs.springframework.beans.factory.annotation.Autowired;
 import cn.cs.springframework.beans.factory.annotation.Value;
 import cn.cs.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 /**
  * @Author cs
  * @Date 2022-11-25 11:20
@@ -13,7 +15,7 @@ public class UserService implements IUserService{
 //    @Value("${token}")
     private String token;
 //    @Autowired
-    private UserDao userDao;
+    private LocalDate createDate;
 
     public String query() {
         try {
@@ -39,10 +41,19 @@ public class UserService implements IUserService{
         this.token = token;
     }
 
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
         return "UserService{" +
                 "token='" + token + '\'' +
+                ", createDate=" + createDate +
                 '}';
     }
 }

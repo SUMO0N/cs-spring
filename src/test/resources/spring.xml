@@ -8,6 +8,12 @@
 
     <bean id="userService" class="cn.cs.springframework.test.bean.UserService">
         <property name="token" value="${token}"/>
+        <property name="createDate" value="2022-12-13"/>
     </bean>
+
+    <bean id="conversionService" class="cn.cs.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters" ref="converters"/>
+    </bean>
+    <bean id="converters" class="cn.cs.springframework.test.converter.ConverterFactoryBean"/>
 
 </beans>

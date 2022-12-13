@@ -1,8 +1,6 @@
 package cn.cs.springframework.test;
 
 import cn.cs.springframework.context.support.ClassPathXmlApplicationContext;
-import cn.cs.springframework.test.bean.A;
-import cn.cs.springframework.test.bean.B;
 import cn.cs.springframework.test.bean.IUserService;
 
 /**
@@ -11,13 +9,8 @@ import cn.cs.springframework.test.bean.IUserService;
  */
 public class ApiTest {
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring-scan.xml");
-//        IUserService userService = applicationContext.getBean("userService", IUserService.class);
-        A a = applicationContext.getBean("a", A.class);
-        B b = applicationContext.getBean("b", B.class);
-        System.out.println(a.getB());
-        System.out.println(b);
-        System.out.println(a.getB().query());
-        System.out.println(b.getA().query());
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        IUserService userService = applicationContext.getBean("userService", IUserService.class);
+        System.out.println(userService);
     }
 }

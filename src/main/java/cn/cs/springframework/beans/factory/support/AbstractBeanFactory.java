@@ -5,8 +5,10 @@ import cn.cs.springframework.beans.factory.FactoryBean;
 import cn.cs.springframework.beans.factory.config.BeanDefinition;
 import cn.cs.springframework.beans.factory.config.BeanPostProcessor;
 import cn.cs.springframework.beans.factory.config.ConfigurableBeanFactory;
+import cn.cs.springframework.core.convert.ConversionService;
 import cn.cs.springframework.uitil.ClassUtils;
 import cn.cs.springframework.uitil.StringValueResolver;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     private List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+
+    private ConversionService conversionService;
 
     @Override
     public Object getBean(String beanName) throws BeansException {
@@ -48,6 +52,13 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
         embeddedValueResolvers.add(valueResolver);
     }
+
+    @Override
+    public boolean containBean(String name) {
+        return containBeanDefinition(name);
+    }
+
+    protected abstract boolean containBeanDefinition(String name);
 
     @Override
     public String resolveEmbeddedValue(String value) {
@@ -78,6 +89,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             object = getCachedObjectForFactoryBean(factoryBean, beanName);
         }
         return object;
+    }
+
+    @Override
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
+
+    @Override
+    public @Nullable ConversionService getConversionService() {
+        return conversionService;
     }
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;

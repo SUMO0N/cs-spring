@@ -11,6 +11,7 @@ import cn.cs.springframework.context.event.ApplicationEventMulticaster;
 import cn.cs.springframework.context.event.ContextClosedEvent;
 import cn.cs.springframework.context.event.ContextRefreshedEvent;
 import cn.cs.springframework.context.event.SimpleApplicationEventMulticaster;
+import cn.cs.springframework.core.convert.ConversionService;
 import cn.cs.springframework.core.io.DefaultResourceLoader;
 
 import java.util.Map;
@@ -45,11 +46,22 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         // 注册监听器
         registryListeners();
 
-        // 提前实例化单例bean对象
-        beanFactory.preInstantiateSingletons();
+        // 设置类型转换器、提前实例化单例bean
+        finishBeanFactoryInitialization(beanFactory);
 
         // 发布容器刷新完成事件
         finishRefresh();
+    }
+
+    private void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
+        if(beanFactory.containBean("conversionService")) {
+            Object conversionService = beanFactory.getBean("conversionService");
+            if(conversionService instanceof ConversionService) {
+                beanFactory.setConversionService((ConversionService)conversionService);
+            }
+        }
+
+        beanFactory.preInstantiateSingletons();
     }
 
     private void finishRefresh() {
@@ -111,6 +123,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
         return getBeanFactory().getBeansOfType(type);
+    }
+
+    @Override
+    public boolean containBean(String name) {
+        return getBeanFactory().containBean(name);
     }
 
     @Override
